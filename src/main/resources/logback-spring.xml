@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    
+   <springProfile name="default | dev | staging | test">
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>[
+    </springProfile>
+
+    <!--<springProfile name="production">-->
+		<springProfile name="default | dev | staging | test">
+        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/Users/iambi/SpringBootApplogs/app.log</file>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>/Users/iambi/SpringBootApplogs/%d{yyyy-MM, aux}/logfile.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <!-- each archived file, size max 10MB -->
+                <maxFileSize>10KB</maxFileSize>
+                <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+                <totalSizeCap>300KB</totalSizeCap>
+                <!-- 60 days to keep -->
+                <maxHistory>60</maxHistory>
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d %p %c [%t] %m%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="com.ey.practice.SpringBootPractice.service" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="FILE-ROLLING"/>
+        </root>
+    </springProfile>
+    
+    
+<!--    https://mkyong.com/spring-boot/spring-boot-logging-example/-->
+
+</configuration>
